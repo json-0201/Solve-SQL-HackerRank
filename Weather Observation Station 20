@@ -1,0 +1,10 @@
+SELECT
+    CAST(AVG(lat_n) AS DECIMAL(8,4))
+FROM
+    (SELECT
+     lat_n,
+     row_number() OVER (ORDER BY lat_n asc) AS asc_lat,
+     row_number() OVER (ORDER BY lat_n desc) AS desc_lat
+    FROM station) AS tb_lat
+WHERE
+    asc_lat IN (desc_lat-1, desc_lat, desc_lat+1);
