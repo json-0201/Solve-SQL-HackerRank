@@ -1,0 +1,4 @@
+SELECT CEILING(AVG(e1.salary) - AVG(e2.salary))
+FROM employees e1, (SELECT id, name, REPLACE(salary,0,"")
+                    AS salary FROM employees) e2
+WHERE e1.id =e2.id;
