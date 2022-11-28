@@ -1,0 +1,4 @@
+SELECT MIN(lat_n), MAX(lat_n), MIN(long_w), MAX(long_w)
+    INTO @a, @b, @c, @d FROM station;
+    
+SELECT ROUND(SQRT(POWER(@a-@b,2)+POWER(@c-@d,2)),4);
