@@ -1,0 +1,5 @@
+SELECT CONCAT(MAX(e1.earning)," ",
+             (SELECT COUNT(*) FROM employee
+             WHERE salary*months=MAX(e1.earning)))
+FROM
+    (SELECT *, salary*months earning FROM employee) e1;
