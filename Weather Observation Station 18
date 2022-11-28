@@ -1,0 +1,9 @@
+SET @a = 0;
+SET @b = 0;
+SET @c = 0;
+SET @d = 0;
+
+SELECT MIN(lat_n), MIN(long_w), MAX(lat_n), MAX(long_w)
+    INTO @a, @b, @c, @d FROM station;
+
+SELECT ROUND((ABS(@a-@c)+ABS(@b-@d)), 4);
