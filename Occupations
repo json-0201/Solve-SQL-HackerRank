@@ -1,0 +1,12 @@
+SELECT
+    MAX(IF(occupation="doctor", name, NULL)),
+    MAX(IF(occupation="professor", name, NULL)),
+    MAX(IF(occupation="singer", name, NULL)),
+    MAX(IF(occupation="actor", name, NULL))
+    
+FROM
+    (SELECT *, row_number() OVER
+     (PARTITION BY occupation ORDER BY name)
+      AS row_num FROM occupations) tb1
+
+GROUP BY row_num;
