@@ -1,0 +1,23 @@
+SELECT
+    id_h, n
+FROM
+    (SELECT
+        n, id_h, COUNT(*) fullcount
+     FROM
+        (SELECT
+            h.name n,
+            h.hacker_id id_h,
+            s.submission_id id_s,
+            s.challenge_id id_c,
+            s.score s_h,
+            d.score s_p
+         FROM
+            hackers h
+            JOIN submissions s ON h.hacker_id=s.hacker_id
+            JOIN challenges c ON s.challenge_id=c.challenge_id
+            JOIN difficulty d ON
+            c.difficulty_level=d.difficulty_level) t1
+        WHERE s_h=s_p
+        GROUP BY n, id_h) t2
+WHERE fullcount > 1
+ORDER BY fullcount DESC, id_h ASC;
