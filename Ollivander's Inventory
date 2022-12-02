@@ -1,14 +1,6 @@
-SELECT
-    id, age, coins_needed, power
-FROM
-(SELECT
-    id,age,coins_needed,power,MIN(coins_needed) OVER (PARTITION BY age, power) AS min_coins
-FROM
-    wands w INNER JOIN wands_property wp ON w.code=wp.code
-WHERE
-    wp.is_evil=0)
-WHERE
-    coins_needed=min_coins
-ORDER BY
-    power DESC, age DESC;
-    
+SELECT id,age,coins_needed,power
+FROM (SELECT id,age,coins_needed,power,MIN(coins_needed) OVER (PARTITION BY age,power) AS min_coins
+FROM wands w INNER JOIN wands_property wp ON w.code=wp.code
+WHERE wp.is_evil=0) t1
+WHERE coins_needed=min_coins
+ORDER BY power DESC, age DESC;
