@@ -1,13 +1,17 @@
 WITH
 T1 (id, ch_num) AS (SELECT hacker_id, COUNT(*) FROM challenges GROUP BY hacker_id),
-T2 (ch_num, dup_num, ch_max) AS (SELECT ch_num, COUNT(*), MAX(ch_num) OVER() FROM T1 GROUP BY ch_num)
+T2 (ch_num, dup_num, max_num) AS (SELECT ch_num, COUNT(*), MAX(ch_num) OVER() FROM T1 GROUP BY ch_num)
 
 SELECT
-    T1.id, h.name, T1.ch_num
-FROM
-    hackers h
-    INNER JOIN T1 ON h.hacker_id = T1.id
-    INNER JOIN T2 ON T1.ch_num = T2.ch_num AND (T1.ch_num = T2.ch_max OR T2.dup_num = 1)
-ORDER BY
-    T1.ch_num DESC, T1.id;
+h.hacker_id, h.name, T1.ch_num
 
+FROM
+hackers h
+INNER JOIN T1 ON h.hacker_id = T1.id
+INNER JOIN T2 ON T1.ch_num = T2.ch_num
+
+WHERE
+T2.dup_num = 1 OR T1.ch_num = T2.max_num
+
+ORDER BY
+T1.ch_num DESC, h.hacker_id;
