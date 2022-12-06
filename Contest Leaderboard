@@ -1,0 +1,34 @@
+/*
+Enter your query here.
+*/
+SELECT
+  *
+FROM(
+    SELECT
+      hacker_id,
+      name,
+      SUM(max_score) AS tot
+    FROM
+      (
+        SELECT
+          h.hacker_id,
+          h.name,
+          s.challenge_id,
+          MAX(s.score) AS max_score
+        FROM
+          hackers h
+          INNER JOIN submissions s ON h.hacker_id = s.hacker_id
+        GROUP BY
+          h.hacker_id,
+          h.name,
+          s.challenge_id
+      ) t1
+    GROUP BY
+      hacker_id,
+      name
+  ) t2
+WHERE
+  tot > 0
+ORDER BY
+  tot DESC,
+  hacker_id ASC;
