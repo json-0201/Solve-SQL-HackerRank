@@ -1,0 +1,19 @@
+WITH
+    CTE1 (start, rn_start) AS(
+        SELECT start_date, ROW_NUMBER() OVER (ORDER BY start_date)
+        FROM projects
+        WHERE start_date NOT IN (SELECT end_date FROM projects)
+        ),
+    CTE2 (end, rn_end) AS (
+        SELECT end_date, ROW_NUMBER() OVER (ORDER BY end_date)
+        FROM projects
+        WHERE end_date NOT IN (SELECT start_date FROM projects)
+        )
+SELECT
+    start, end
+FROM
+    CTE1, CTE2
+WHERE
+    CTE1.rn_start=CTE2.rn_end
+ORDER BY
+    end-start ASC, start ASC;
