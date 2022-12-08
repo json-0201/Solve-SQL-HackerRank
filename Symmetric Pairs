@@ -1,10 +1,10 @@
 SELECT
     a.x, a.y
 FROM
-    functions a INNER JOIN functions b ON a.x=b.y AND b.x=a.y
+    functions a INNER JOIN functions b ON a.x = b.y AND b.x = a.y
 GROUP BY
     a.x, a.y
 HAVING
-    COUNT(a.x)>1 OR a.x<a.y
+    COUNT(*) > 1 OR a.x < a.y
 ORDER BY
     a.x ASC;
