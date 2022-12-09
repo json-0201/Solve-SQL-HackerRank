@@ -1,0 +1,43 @@
+WITH tot_views (cont_id, sum_v, sum_v_un) AS (
+  SELECT
+    coll.contest_id,
+    SUM(vs.total_views),
+    SUM(vs.total_unique_views)
+  FROM
+    colleges coll
+    INNER JOIN challenges chall ON coll.college_id = chall.college_id
+    INNER JOIN view_stats vs ON chall.challenge_id = vs.challenge_id
+  GROUP BY
+    coll.contest_id
+),
+tot_subs (cont_id, sum_s, sum_s_ac) AS (
+  SELECT
+    coll.contest_id,
+    SUM(ss.total_submissions),
+    SUM(ss.total_accepted_submissions)
+  FROM
+    colleges coll
+    INNER JOIN challenges chall ON coll.college_id = chall.college_id
+    INNER JOIN submission_stats ss ON chall.challenge_id = ss.challenge_id
+  GROUP BY
+    coll.contest_id
+)
+SELECT
+  cont.contest_id,
+  cont.hacker_id,
+  cont.name,
+  ts.sum_s,
+  ts.sum_s_ac,
+  tv.sum_v,
+  tv.sum_v_un
+FROM
+  contests cont
+  INNER JOIN tot_views tv ON cont.contest_id = tv.cont_id
+  INNER JOIN tot_subs ts ON cont.contest_id = ts.cont_id
+WHERE
+  ts.sum_s > 0
+  OR ts.sum_s_ac > 0
+  OR tv.sum_v > 0
+  OR tv.sum_v_un > 0
+ORDER BY
+  cont.contest_id ASC;
