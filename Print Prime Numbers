@@ -1,0 +1,30 @@
+create table prime_numbers (number integer)
+
+declare @i int = 2
+declare @div int
+declare @prime BIT
+
+while @i <= 1000
+    begin
+    
+    set @div = @i-1
+    set @prime = 1
+    
+    -- prime number test --
+    while @div > 1
+        begin
+        
+        if @i % @div = 0
+            set @prime = 0
+        set @div = @div -1
+        end
+    
+    -- append to table if prime number
+    if @prime=1
+        insert into prime_numbers (number) values (@i)
+    
+    -- move to next integer
+    set @i = @i + 1
+    end
+    
+select string_agg (cast(number as varchar), "&") as primes from prime_numbers;
